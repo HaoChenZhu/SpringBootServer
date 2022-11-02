@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ShopRepository extends MongoRepository<Shop,String> {
-  Optional<Shop> findByName(String name);
-
+  Shop findByName(String name);
+  Shop findByNameOrTelephone(String name,String telephone);
 }

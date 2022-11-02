@@ -4,7 +4,7 @@ import es.nebrija.SpringBootServer.Shop.Domain.Shop;
 import es.nebrija.SpringBootServer.Shop.Application.ShopService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Update;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +21,12 @@ public class ShopController {
   private void addShop(@RequestBody Shop shop) {
     shopService.addShop(shop);
   }
+  @PostMapping("/addProduct/{name}/{idProduct}")
+  public void addProduct(@PathVariable(value = "idProduct")String productId, @PathVariable(value = "name") String name){
+    ObjectId id= new ObjectId(productId);
+
+    shopService.addProductToShop(name,id);
+  }
   @GetMapping("/{id}")
   private Optional<Shop> getShopById(@PathVariable(value = "id") String id){
     ObjectId a = new ObjectId(id);
@@ -30,9 +36,8 @@ public class ShopController {
   private List<Shop> getShops() {
     return shopService.getAllShops();
   }
-
   @GetMapping("/name/{name}")
-  private Optional<Shop> getShop(@PathVariable String name){
+  private Shop getShop(@PathVariable String name){
     return shopService.getShopByName(name);
   }
   @PutMapping("/{id}")

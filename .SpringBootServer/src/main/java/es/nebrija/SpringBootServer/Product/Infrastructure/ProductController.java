@@ -3,7 +3,6 @@ package es.nebrija.SpringBootServer.Product.Infrastructure;
 
 import es.nebrija.SpringBootServer.Product.Application.ProductService;
 import es.nebrija.SpringBootServer.Product.Domain.Product;
-import es.nebrija.SpringBootServer.Shop.Domain.Shop;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,14 +26,14 @@ public class ProductController {
     return productService.getProducts();
   }
   @GetMapping("/{id}")
-  private Optional<Product> getProductById(@PathVariable(value = "id") String product_id){
+  private Product getProductById(@PathVariable(value = "id") String product_id){
     ObjectId id = new ObjectId(product_id);
     return productService.getProductById(id);
   }
- /* @GetMapping("/product/name/{name}")
-  private Optional<Product> getProductByName(@PathVariable(value = "name") String product_name){
-    return productService.getProductByName(product_name);
-  }*/
+  @GetMapping("/name/{name}")
+  private Product getProductByName(@PathVariable(value = "name") String product_name){
+    return productService.getProductByProductName(product_name);
+  }
 
   @PutMapping("/{id}")
   private void updateProductById(@PathVariable(value = "id") String product_identifier, Product product){
