@@ -1,5 +1,6 @@
-package es.nebrija.SpringBootServer.Product.Application;
+package es.nebrija.SpringBootServer.Product.Application.service;
 
+import es.nebrija.SpringBootServer.Product.Application.repository.ProductRepository;
 import es.nebrija.SpringBootServer.Product.Domain.Product;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package es.nebrija.SpringBootServer.Product.Application;
+package es.nebrija.SpringBootServer.Product.Application.repository;
 
 import es.nebrija.SpringBootServer.Product.Domain.Product;
 import org.springframework.data.mongodb.repository.MongoRepository;
