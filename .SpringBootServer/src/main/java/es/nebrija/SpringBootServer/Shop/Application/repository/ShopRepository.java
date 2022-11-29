@@ -1,7 +1,6 @@
 package es.nebrija.SpringBootServer.Shop.Application.repository;
 
 import es.nebrija.SpringBootServer.Shop.Domain.Shop;
-import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ResponseShopDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,10 +10,15 @@ public interface ShopRepository {
 
     void save(Shop shop);
 
+    void update(Shop shop);
+
     boolean existsByName(String name);
 
-    Shop findByName(String name);
+    Shop findShopByName(String name);
 
     List<Shop> findAll();
+
+    void delete(String name);
+
 
 }

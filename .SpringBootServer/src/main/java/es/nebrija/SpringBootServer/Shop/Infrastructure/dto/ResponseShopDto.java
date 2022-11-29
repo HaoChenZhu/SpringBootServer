@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class ResponseShopDto {
-
     private String name;
     private String telephone;
     private Location location;

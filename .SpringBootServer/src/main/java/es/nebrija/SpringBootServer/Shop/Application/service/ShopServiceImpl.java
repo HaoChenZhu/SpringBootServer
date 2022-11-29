@@ -1,64 +1,80 @@
 package es.nebrija.SpringBootServer.Shop.Application.service;
 
+import es.nebrija.SpringBootServer.Product.Application.service.ProductService;
+import es.nebrija.SpringBootServer.Product.Domain.Product;
 import es.nebrija.SpringBootServer.Shop.Application.repository.ShopRepository;
+import es.nebrija.SpringBootServer.Shop.Domain.Shop;
+import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.PostShopRequestDto;
+import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ResponseShopDto;
 import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ShopUpdateRequest;
+import es.nebrija.SpringBootServer.Shop.Infrastructure.exceptions.ShopAlreadyExistsException;
+import es.nebrija.SpringBootServer.Shop.Infrastructure.exceptions.ShopNotFoundException;
+import es.nebrija.SpringBootServer.Shop.Infrastructure.mapper.ShopMapper;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import es.nebrija.SpringBootServer.Product.Application.service.ProductService;
-import es.nebrija.SpringBootServer.Product.Domain.Product;
-import es.nebrija.SpringBootServer.Shop.Infrastructure.dao.ShopDao;
-import es.nebrija.SpringBootServer.Shop.Domain.Shop;
-import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ResponseShopDto;
-import es.nebrija.SpringBootServer.Shop.Infrastructure.mapper.ShopMapper;
-import org.bson.types.ObjectId;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ShopServiceImpl implements ShopService {
-  @Autowired
-  private ShopRepository shopRepository;
-  @Autowired
-  private ShopMapper shopMapper;
-  @Autowired
-  private ProductService productService;
+    @Autowired
+    private ShopRepository shopRepository;
+    @Autowired
+    private ShopMapper shopMapper;
+    @Autowired
+    private ProductService productService;
 
 
-
-  public List<ResponseShopDto> getAllShops(){
-    return shopMapper.fromEntitiesToDto(shopRepository.findAll());
-  }
-
-  @Override
-  public ResponseShopDto getShopByName(String name){
-    Shop shop= shopRepository.findByName(name);
-    return shopMapper.toDto(shop);
-  }
-
-  public void addShop(Shop shop){
-    System.out.println(shop.toString());
-    shopRepository.save(shop);
-  }
-
-  public void updateShop(String name, ShopUpdateRequest shopUpdateRequest){
-    boolean exist= shopRepository.existsByName(name);
-    if(exist){
-      shopRepository.save(shopMapper.toEntity(shopUpdateRequest));
-    }else {
-      System.out.println("No existe");
+    @Override
+    public List<ResponseShopDto> getAllShops() {
+        return shopMapper.fromEntitiesToDto(shopRepository.findAll());
     }
-  }
-  public void addProductToShop(String name, ObjectId product_id){
-      Product product= productService.getProductById(product_id);
-      Shop shop = shopRepository.findByName(name);
 
-      shop.getProductList().add(product);
-      shopRepository.save(shop);
-  }
+    @Override
+    public ResponseShopDto getShopByName(String name) throws ShopNotFoundException {
+        if (!shopRepository.existsByName(name)) throw new ShopNotFoundException(name);
+        Shop shop = shopRepository.findShopByName(name);
 
+        return shopMapper.toDto(shop);
+    }
 
+    @Override
+    public void addShop(PostShopRequestDto postShopRequestDto) throws ShopAlreadyExistsException {
+        if (shopRepository.existsByName(postShopRequestDto.getName()))
+            throw new ShopAlreadyExistsException(postShopRequestDto.getName());
+        shopRepository.save(shopMapper.toEntity(postShopRequestDto));
+    }
+
+    @Override
+    public void deleteShop(String name) throws ShopNotFoundException {
+        if (!shopRepository.existsByName(name)) throw new ShopNotFoundException(name);
+        shopRepository.delete((name));
+    }
+
+    @Override
+    public void updateShop(ShopUpdateRequest shopUpdateRequest) throws ShopNotFoundException {
+        boolean exist = shopRepository.existsByName(shopUpdateRequest.getName());
+
+        if (exist) {
+            Shop updateShop = shopRepository.findShopByName(shopUpdateRequest.getName());
+            updateShop.setShop_img(shopUpdateRequest.getShop_img());
+            updateShop.setLocation(shopUpdateRequest.getLocation());
+            updateShop.setTelephone(shopUpdateRequest.getTelephone());
+
+            shopRepository.update(updateShop);
+        } else {
+            throw new ShopNotFoundException(shopUpdateRequest.getName());
+        }
+    }
+
+    public void addProductToShop(String name, ObjectId product_id) {
+        Product product = productService.getProductById(product_id);
+        Shop shop = shopRepository.findShopByName(name);
+        System.out.println(shop.toString() + product.toString());
+        shop.getProductList().add(product);
+        shopRepository.update(shop);
+    }
 
 
 }

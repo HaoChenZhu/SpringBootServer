@@ -5,14 +5,15 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
+
 @Data
-public class ShopUpdateRequest {
-    @NotNull
+public class PostShopRequestDto {
+    @NotNull(message = "El nombre no puede ser nulo")
     private String name;
-    @NotNull
+    @NotNull(message = "El telefono no puede ser nulo")
     private String telephone;
-    @NotNull
+    @NotNull(message = "La localizacion no puede ser nulo")
     private Location location = new Location();
-    @NotNull
+    @NotNull(message = "La imagen no puede ser nulo")
     private String shop_img;
 }
