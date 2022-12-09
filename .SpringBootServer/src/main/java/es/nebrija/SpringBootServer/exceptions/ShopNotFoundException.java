@@ -1,4 +1,4 @@
-package es.nebrija.SpringBootServer.Shop.Infrastructure.exceptions;
+package es.nebrija.SpringBootServer.exceptions;
 
 public class ShopNotFoundException extends RuntimeException {
 

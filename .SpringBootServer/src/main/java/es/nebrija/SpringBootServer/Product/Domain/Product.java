@@ -12,7 +12,6 @@ import java.lang.reflect.Array;
 @Document
 public class Product {
   @Id
-  @Field(targetType = FieldType.OBJECT_ID)
   private String productId;
   private String productName;
   private String productDescription;
@@ -20,5 +19,4 @@ public class Product {
   private double price;
   private String[] productCategory;
   private String productImg;
-
 }

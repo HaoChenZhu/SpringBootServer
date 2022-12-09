@@ -3,12 +3,12 @@ package es.nebrija.SpringBootServer.Shop.Infrastructure.controller;
 import es.nebrija.SpringBootServer.Shop.Application.service.ShopServiceImpl;
 import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.PostShopRequestDto;
 import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ResponseShopDto;
+import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ResponseShopProductDto;
 import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ShopUpdateRequest;
-import es.nebrija.SpringBootServer.Shop.Infrastructure.exceptions.ApiException;
-import es.nebrija.SpringBootServer.Shop.Infrastructure.exceptions.ShopAlreadyExistsException;
-import es.nebrija.SpringBootServer.Shop.Infrastructure.exceptions.ShopNotFoundException;
+import es.nebrija.SpringBootServer.exceptions.ApiException;
+import es.nebrija.SpringBootServer.exceptions.ShopAlreadyExistsException;
+import es.nebrija.SpringBootServer.exceptions.ShopNotFoundException;
 import io.swagger.annotations.ApiResponse;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,16 +30,22 @@ public class ShopController {
         shopServiceImpl.addShop(postShopRequestDto);
     }
 
-    @PostMapping("/addProduct/{name}/{idProduct}")
-    public void addProduct(@PathVariable(value = "name") String name, @PathVariable(value = "idProduct") String productId) {
-        ObjectId id = new ObjectId(productId);
-        shopServiceImpl.addProductToShop(name, id);
+    @PostMapping("/addProduct/{name}/{product_name}")
+    public void addProduct(@PathVariable(value = "name") String name, @PathVariable(value = "product_name") String product_name) {
+        shopServiceImpl.addProductToShop(name, product_name);
     }
 
     @GetMapping
-    private ResponseEntity<List<ResponseShopDto>> getShops() {
+    private ResponseEntity<List<ResponseShopDto>> getShops() throws NullPointerException {
         return new ResponseEntity<>(shopServiceImpl.getAllShops(), HttpStatus.OK);
     }
+
+    @GetMapping("/products/{name}")
+    private ResponseEntity<ResponseShopProductDto> getShopProduct(@PathVariable String name) throws ShopNotFoundException {
+
+        return new ResponseEntity<>(shopServiceImpl.getShopProductByName(name), HttpStatus.OK);
+    }
+
 
     @ApiResponse(code = 404, message = "No records found", response = ApiException.class)
     @GetMapping("/name/{name}")
@@ -49,11 +55,11 @@ public class ShopController {
     }
 
     @PutMapping("/update")
-    private void updateShop(@RequestBody @Valid ShopUpdateRequest shop) throws ShopNotFoundException{
+    private void updateShop(@RequestBody @Valid ShopUpdateRequest shop) throws ShopNotFoundException {
         shopServiceImpl.updateShop(shop);
     }
 
-    @PutMapping("/delete/{name}")
+    @DeleteMapping("/delete/{name}")
     private void deleteShop(@PathVariable String name) throws ShopNotFoundException {
         shopServiceImpl.deleteShop(name);
     }

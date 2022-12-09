@@ -1,10 +1,22 @@
 package es.nebrija.SpringBootServer.Category.Application.repository;
 
 import es.nebrija.SpringBootServer.Category.Domain.Category;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
-public interface CategoryRepository extends MongoRepository<Category,String> {
-  Optional<Category> findByName(String name);
+@Repository
+public interface CategoryRepository {
+
+    void save(Category category);
+
+    void update(Category category);
+
+    boolean existsByName(String name);
+
+    Category findCategoryByName(String name);
+
+    List<Category> findAll();
+
+    void delete(String name);
 }

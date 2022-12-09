@@ -1,4 +1,4 @@
-package es.nebrija.SpringBootServer.Shop.Infrastructure.exceptions;
+package es.nebrija.SpringBootServer.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +63,4 @@ public class ApiExceptionHandler {
         });
         return errors;
     }
-
-
 }

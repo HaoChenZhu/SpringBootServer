@@ -3,12 +3,15 @@ package es.nebrija.SpringBootServer.Shop.Application.service;
 
 import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.PostShopRequestDto;
 import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ResponseShopDto;
+import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ResponseShopProductDto;
 import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ShopUpdateRequest;
 
 import java.util.List;
 
 public interface ShopService {
     ResponseShopDto getShopByName(String name);
+
+    ResponseShopProductDto getShopProductByName(String name);
 
     List<ResponseShopDto> getAllShops();
 
@@ -17,5 +20,7 @@ public interface ShopService {
     void addShop(PostShopRequestDto postShopRequestDto);
 
     void deleteShop(String name);
+
+    void addProductToShop(String name, String product_name);
 
 }

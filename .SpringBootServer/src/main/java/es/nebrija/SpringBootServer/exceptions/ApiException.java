@@ -1,4 +1,4 @@
-package es.nebrija.SpringBootServer.Shop.Infrastructure.exceptions;
+package es.nebrija.SpringBootServer.exceptions;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;

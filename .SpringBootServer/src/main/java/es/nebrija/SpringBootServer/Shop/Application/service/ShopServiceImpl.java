@@ -1,16 +1,20 @@
 package es.nebrija.SpringBootServer.Shop.Application.service;
 
-import es.nebrija.SpringBootServer.Product.Application.service.ProductService;
-import es.nebrija.SpringBootServer.Product.Domain.Product;
+import es.nebrija.SpringBootServer.Product.Application.repository.ProductRepository;
+import es.nebrija.SpringBootServer.Product.Application.service.ProductServiceImpl;
+import es.nebrija.SpringBootServer.Product.Infrastructure.dto.ResponseProductDto;
+import es.nebrija.SpringBootServer.Product.Infrastructure.mapper.ProductMapper;
 import es.nebrija.SpringBootServer.Shop.Application.repository.ShopRepository;
 import es.nebrija.SpringBootServer.Shop.Domain.Shop;
 import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.PostShopRequestDto;
 import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ResponseShopDto;
+import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ResponseShopProductDto;
 import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ShopUpdateRequest;
-import es.nebrija.SpringBootServer.Shop.Infrastructure.exceptions.ShopAlreadyExistsException;
-import es.nebrija.SpringBootServer.Shop.Infrastructure.exceptions.ShopNotFoundException;
 import es.nebrija.SpringBootServer.Shop.Infrastructure.mapper.ShopMapper;
-import org.bson.types.ObjectId;
+import es.nebrija.SpringBootServer.exceptions.NotValuesException;
+import es.nebrija.SpringBootServer.exceptions.ProductNotFoundException;
+import es.nebrija.SpringBootServer.exceptions.ShopAlreadyExistsException;
+import es.nebrija.SpringBootServer.exceptions.ShopNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +25,19 @@ public class ShopServiceImpl implements ShopService {
     @Autowired
     private ShopRepository shopRepository;
     @Autowired
-    private ShopMapper shopMapper;
+    private ProductRepository productRepository;
     @Autowired
-    private ProductService productService;
+    private ShopMapper shopMapper;
+
+    @Autowired
+    private ProductMapper productMapper;
+    @Autowired
+    private ProductServiceImpl productServiceImpl;
 
 
     @Override
-    public List<ResponseShopDto> getAllShops() {
+    public List<ResponseShopDto> getAllShops() throws NotValuesException {
+        if(shopRepository.findAll().size()<=0) throw new NotValuesException();
         return shopMapper.fromEntitiesToDto(shopRepository.findAll());
     }
 
@@ -37,6 +47,14 @@ public class ShopServiceImpl implements ShopService {
         Shop shop = shopRepository.findShopByName(name);
 
         return shopMapper.toDto(shop);
+    }
+
+    @Override
+    public ResponseShopProductDto getShopProductByName(String name) throws ShopNotFoundException {
+        if (!shopRepository.existsByName(name)) throw new ShopNotFoundException(name);
+        Shop shop = shopRepository.findShopByName(name);
+        return shopMapper.fromEntitiesToDto(shop);
+
     }
 
     @Override
@@ -68,11 +86,16 @@ public class ShopServiceImpl implements ShopService {
         }
     }
 
-    public void addProductToShop(String name, ObjectId product_id) {
-        Product product = productService.getProductById(product_id);
+    @Override
+    public void addProductToShop(String name, String product_name) throws ShopNotFoundException, ProductNotFoundException {
+        boolean exist = shopRepository.existsByName(name);
+        boolean existProduct = productRepository.existsByName(product_name);
+        if (!exist) throw new ShopNotFoundException(name);
+        if (!existProduct) throw new ProductNotFoundException(product_name);
+        ResponseProductDto product = productServiceImpl.getProductByName(product_name);
         Shop shop = shopRepository.findShopByName(name);
-        System.out.println(shop.toString() + product.toString());
-        shop.getProductList().add(product);
+
+        shop.getProductList().add(productMapper.toEntity(product));
         shopRepository.update(shop);
     }
 

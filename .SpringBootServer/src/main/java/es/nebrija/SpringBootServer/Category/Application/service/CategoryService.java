@@ -1,26 +1,23 @@
 package es.nebrija.SpringBootServer.Category.Application.service;
 
-import es.nebrija.SpringBootServer.Category.Application.repository.CategoryRepository;
-import es.nebrija.SpringBootServer.Category.Domain.Category;
-import org.springframework.beans.factory.annotation.Autowired;
+import es.nebrija.SpringBootServer.Category.Infrastructure.dto.PostCategoryRequestDto;
+import es.nebrija.SpringBootServer.Category.Infrastructure.dto.ResponseCategoryDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CategoryService {
+public interface CategoryService {
 
-  @Autowired
-  private CategoryRepository categoryRepository;
+    ResponseCategoryDto getCategoryByName(String name);
 
-  public void addCategory(Category category){
-    categoryRepository.save(category);
-  }
-  public void getCategoryByName(String name){
-    categoryRepository.findByName(name);
-  }
+    List<ResponseCategoryDto> getAllCategory();
 
-  public List<Category> getCategories(){
-    return categoryRepository.findAll();
-  }
+    void addCategory(PostCategoryRequestDto postCategoryRequestDto);
+
+    void deleteCategory(String name);
+
+    void updateCategory(PostCategoryRequestDto postCategoryRequestDto);
+
+
 }

@@ -15,11 +15,7 @@ public class ShopRepositoryImpl implements ShopRepository {
 
     @Override
     public void save(Shop shop) {
-        if (!shopDao.existsShopByName(shop.getName())) {
             shopDao.save(shop);
-        } else {
-            throw new RuntimeException("Shop already exists");
-        }
     }
 
     @Override
@@ -36,6 +32,7 @@ public class ShopRepositoryImpl implements ShopRepository {
     public Shop findShopByName(String name) {
         return shopDao.findByName(name);
     }
+
 
     @Override
     public List<Shop> findAll() {
