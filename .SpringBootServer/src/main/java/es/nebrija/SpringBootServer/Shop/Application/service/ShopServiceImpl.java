@@ -37,7 +37,7 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public List<ResponseShopDto> getAllShops() throws NotValuesException {
-        if(shopRepository.findAll().size()<=0) throw new NotValuesException();
+        if (shopRepository.findAll().size() <= 0) throw new NotValuesException();
         return shopMapper.fromEntitiesToDto(shopRepository.findAll());
     }
 

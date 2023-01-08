@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class CategoryRepositoryImpl implements CategoryRepository{
+public class CategoryRepositoryImpl implements CategoryRepository {
     @Autowired
     CategoryDao categoryDao;
 

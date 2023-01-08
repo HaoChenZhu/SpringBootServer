@@ -1,7 +1,6 @@
 package es.nebrija.SpringBootServer.Product.Application.repository;
 
 import es.nebrija.SpringBootServer.Product.Domain.Product;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

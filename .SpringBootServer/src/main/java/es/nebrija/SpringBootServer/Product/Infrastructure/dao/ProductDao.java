@@ -1,7 +1,6 @@
 package es.nebrija.SpringBootServer.Product.Infrastructure.dao;
 
 import es.nebrija.SpringBootServer.Product.Domain.Product;
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

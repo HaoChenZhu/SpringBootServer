@@ -1,11 +1,9 @@
 package es.nebrija.SpringBootServer.Product.Infrastructure.controller;
 
 
-import es.nebrija.SpringBootServer.Product.Application.service.ProductServiceImpl;
-import es.nebrija.SpringBootServer.Product.Domain.Product;
+import es.nebrija.SpringBootServer.Product.Application.service.ProductService;
 import es.nebrija.SpringBootServer.Product.Infrastructure.dto.PostProductRequestDto;
 import es.nebrija.SpringBootServer.Product.Infrastructure.dto.ResponseProductDto;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/server/product")
 public class ProductController {
     @Autowired
-    private ProductServiceImpl productService;
+    private ProductService productService;
 
     @PostMapping
     private void addProduct(@RequestBody PostProductRequestDto product) {
@@ -32,11 +31,12 @@ public class ProductController {
 
     @GetMapping("/name/{name}")
     private ResponseEntity<ResponseProductDto> getProductByName(@PathVariable(value = "name") String product_name) {
-        return new ResponseEntity<>(productService.getProductByName(product_name),HttpStatus.OK);
+        return new ResponseEntity<>(productService.getProductByName(product_name), HttpStatus.OK);
     }
+
     @GetMapping("/identifier/{id}")
     private ResponseEntity<ResponseProductDto> getProductById(@PathVariable(value = "id") String id) {
-        return new ResponseEntity<>(productService.getProductById(id),HttpStatus.OK);
+        return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -46,7 +46,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    private void deleteProductById(@PathVariable(value = "id") String product_identifier){
+    private void deleteProductById(@PathVariable(value = "id") String product_identifier) {
         productService.deleteProduct(product_identifier);
     }
 

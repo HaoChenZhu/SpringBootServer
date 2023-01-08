@@ -1,6 +1,6 @@
 package es.nebrija.SpringBootServer.Shop.Infrastructure.controller;
 
-import es.nebrija.SpringBootServer.Shop.Application.service.ShopServiceImpl;
+import es.nebrija.SpringBootServer.Shop.Application.service.ShopService;
 import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.PostShopRequestDto;
 import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ResponseShopDto;
 import es.nebrija.SpringBootServer.Shop.Infrastructure.dto.ResponseShopProductDto;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/server/shop")
 public class ShopController {
     @Autowired
-    private ShopServiceImpl shopServiceImpl;
+    private ShopService shopServiceImpl;
 
 
     @PostMapping

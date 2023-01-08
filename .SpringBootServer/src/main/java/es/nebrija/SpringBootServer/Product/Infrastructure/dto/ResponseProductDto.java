@@ -2,8 +2,6 @@ package es.nebrija.SpringBootServer.Product.Infrastructure.dto;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-
 @Data
 public class ResponseProductDto {
 

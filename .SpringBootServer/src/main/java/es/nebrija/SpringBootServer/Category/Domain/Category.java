@@ -8,10 +8,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @Document
 public class Category {
-  @Id
-  private ObjectId identifier;
-  private String name;
-  private String category_detail;
+    @Id
+    private ObjectId identifier;
+    private String name;
+    private String category_detail;
 
 
 }

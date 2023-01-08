@@ -15,7 +15,7 @@ public class ShopRepositoryImpl implements ShopRepository {
 
     @Override
     public void save(Shop shop) {
-            shopDao.save(shop);
+        shopDao.save(shop);
     }
 
     @Override
